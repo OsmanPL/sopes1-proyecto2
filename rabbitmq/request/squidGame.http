@@ -1,0 +1,3 @@
+###
+POST http://localhost:4000/game/12/gamename/Random/players/134
+Content-Type: "application/json"
