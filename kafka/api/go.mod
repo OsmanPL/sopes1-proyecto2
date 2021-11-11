@@ -3,7 +3,10 @@ module github.com/sevenpok/api-rabbit
 go 1.17
 
 require (
+	github.com/KromDaniel/rejonson v0.0.0
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gorilla/mux v1.8.0
+	github.com/joho/godotenv v1.4.0
 	github.com/segmentio/kafka-go v0.4.23
 	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1

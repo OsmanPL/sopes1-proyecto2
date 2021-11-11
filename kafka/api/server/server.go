@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"strconv"
+	"math/rand"
 
 	"github.com/segmentio/kafka-go"
 
@@ -25,10 +26,13 @@ func produce (ctx context.Context, req *pb.Game){
 		Topic: topic,
 		Logger: l,
 	})
-
+	winner := rand.Intn(int(req.Players)+1)
 	err := w.WriteMessages(ctx, kafka.Message{
 		Key: []byte(strconv.Itoa(int(req.Id))),
-		Value: []byte("{id: "+ strconv.Itoa(int(req.Id))+ ", gameName: "+req.GameName+", players: "+strconv.Itoa(int(req.Players))+"}"),
+		Value: []byte("{\"id\": "+ strconv.Itoa(int(req.Id))+ 
+		", \"gameName\": \""+req.GameName+"\", \"Winner\":\""+
+		strconv.Itoa(winner)+"\", \"players\": "+strconv.Itoa(int(req.Players))+
+		", \"worker\":\"Kafka\"}"),
 	})
 
 	if err != nil {
@@ -42,7 +46,7 @@ type testApiServer struct {
 func (s *testApiServer) CreateGame(ctx context.Context, req *pb.Game) (*pb.ResponseRequest, error) {
 	fmt.Println(req)
 	msg := pb.ResponseRequest{Msg: "creado"}
-
+	produce(ctx, req)
 	return &msg, nil
 }
 
