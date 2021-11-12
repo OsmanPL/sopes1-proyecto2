@@ -5,10 +5,21 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/KromDaniel/rejonson"
+	"github.com/go-redis/redis"
 	"github.com/sevenpok/api-rabbit/controller"
 	"github.com/sevenpok/api-rabbit/models"
 	"github.com/streadway/amqp"
 )
+
+var goRedisClient = redis.NewClient(&redis.Options{
+	Addr: "34.121.89.39:6379",
+})
+
+func insertRedis(body string) {
+	client := rejonson.ExtendClient(goRedisClient)
+	client.JsonArrAppend("squid_game", ".", body)
+}
 
 func main() {
 	conn, err := amqp.Dial("amqp://admin:admin@localhost:5672/")
@@ -49,8 +60,9 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			} else {
-				fmt.Println("Se inserto correctamente")
+				fmt.Println("Se inserto correctamente en MongoDB")
 			}
+			insertRedis(string(delivery.Body))
 		}
 	}()
 

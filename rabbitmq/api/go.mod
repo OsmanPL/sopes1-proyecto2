@@ -3,6 +3,8 @@ module github.com/sevenpok/api-rabbit
 go 1.17
 
 require (
+	github.com/KromDaniel/rejonson v0.0.0
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/streadway/amqp v1.0.0
 	go.mongodb.org/mongo-driver v1.7.4
@@ -11,10 +13,13 @@ require (
 )
 
 require (
+	github.com/KromDaniel/jonson v0.0.0-20180630143114-d2f9c3c389db // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/onsi/ginkgo v1.16.5 // indirect
+	github.com/onsi/gomega v1.17.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.0.2 // indirect
