@@ -8,7 +8,6 @@ import(
 	"os"
 	"github.com/KromDaniel/rejonson"
 	"github.com/go-redis/redis"
-	"strings"
 )
 
 const(
@@ -16,7 +15,7 @@ const(
 	brokerAddress = "localhost:9092"
 )
 var goRedisClient = redis.NewClient(&redis.Options{
-	Addr: "",
+	Addr: "34.121.89.39:6379",
   })
 
 
@@ -41,20 +40,8 @@ func consume(ctx context.Context){
 }
 
 func insertRedis(body string){
-	
-
 	client := rejonson.ExtendClient(goRedisClient)
-	jsonString, err := client.JsonGet("INDEX").Result()
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	body = strings.Replace(body, "{", "{\"request_number\":"+jsonString+",", 1)
-
 	client.JsonArrAppend("squid_game",".",body)
-
-	client.JsonNumIncrBy("INDEX", ".", 1)
-
 }
 
 func main(){
