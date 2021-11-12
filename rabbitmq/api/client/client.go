@@ -5,19 +5,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"strconv"
+	"time"
+
+	"github.com/sevenpok/api-rabbit/models"
 
 	"github.com/gorilla/mux"
 	pb "github.com/sevenpok/api-rabbit/gen/proto"
 	"google.golang.org/grpc"
 )
-
-type Game struct {
-	ID       int    `json:"id"`
-	GameName string `json:"gameName"`
-	Players  int    `json:"players"`
-}
 
 func squidGame(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
@@ -33,7 +31,8 @@ func squidGame(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//crear struct con los valores
-	game := Game{id, vars["gameName"], players}
+
+	game := models.Game{ID: id, GameName: vars["gameName"], Winner: RandomWinner(1, players), Players: players, Worker: "RabbitMQ"}
 	w.WriteHeader(http.StatusOK)
 	result, _ := json.Marshal(game)
 
@@ -61,18 +60,24 @@ func main() {
 	server()
 }
 
-func CreateGame(game *Game) {
+func CreateGame(game *models.Game) {
 	conn, err := grpc.Dial("localhost:8080", grpc.WithInsecure())
 	if err != nil {
 		log.Println(err)
 	}
 	client_ := pb.NewTestApiClient(conn)
 
-	resp, err := client_.CreateGame(context.Background(), &pb.Game{Id: int64(game.ID), GameName: game.GameName, Players: int64(game.Players)})
+	resp, err := client_.CreateGame(context.Background(), &pb.Game{Id: int64(game.ID), Winner: game.Winner, GameName: game.GameName, Players: int64(game.Players), Worker: "RabbitMQ"})
 	if err != nil {
 		log.Println(err)
 	}
 
 	fmt.Println(resp)
 	fmt.Println(resp.Msg)
+}
+
+func RandomWinner(min int, max int) string {
+	rand.Seed(time.Now().UnixNano())
+	num := (rand.Intn(max-min+1) + min)
+	return strconv.Itoa(num)
 }
