@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
+	"github.com/sevenpok/api-rabbit/controller"
+	"github.com/sevenpok/api-rabbit/models"
 	"github.com/streadway/amqp"
 )
 
@@ -39,7 +42,15 @@ func main() {
 
 	go func() {
 		for delivery := range chDelivery {
-			fmt.Println("msg: " + string(delivery.Body))
+			var game models.Game
+			json.Unmarshal([]byte(delivery.Body), &game)
+			//fmt.Println(game)
+			err := controller.Create(game)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				fmt.Println("Se inserto correctamente")
+			}
 		}
 	}()
 

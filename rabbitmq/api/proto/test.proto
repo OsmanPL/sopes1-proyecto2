@@ -15,5 +15,7 @@ message ResponseRequest {
 message Game {
     int64 id = 1;
     string gameName = 2;
-    int64 players = 3;
+    string winner = 3;
+    int64 players = 4;
+    string worker = 5;
 }
