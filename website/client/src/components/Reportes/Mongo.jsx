@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Graphic from "./Graphic";
 
-const Reporte = () => {
+const Mongo = () => {
   const [data, setData] = useState([]);
   const [topJuegos, setTopJuegos] = useState([]);
   const [topWorker, setTopWorker] = useState([]);
@@ -21,6 +21,10 @@ const Reporte = () => {
     socket.on("getTopGames", (value) => {
       setTopJuegos(value);
     });
+
+    return () => {
+      // This is the cleanup function
+    };
   }, []);
 
   const getLabels = (top) => {
@@ -80,4 +84,4 @@ const Reporte = () => {
   );
 };
 
-export default Reporte;
+export default Mongo;

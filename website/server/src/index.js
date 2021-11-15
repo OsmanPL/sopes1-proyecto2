@@ -50,6 +50,30 @@ io.on("connection", (socket) => {
       .catch((e) => console.log(e));
   }, 1500);
 
+  setInterval(() => {
+    getLastGames()
+      .then((data) => {
+        socket.emit("getLastGames", data);
+      })
+      .catch((e) => console.log(e));
+  }, 1500);
+
+  setInterval(() => {
+    getBestPlayers()
+      .then((data) => {
+        socket.emit("getBestPlayers", data);
+      })
+      .catch((e) => console.log(e));
+  }, 1500);
+
+  socket.on("statplayer", (value) => {
+    getPlayer(value)
+      .then((data) => {
+        socket.emit("getPlayer", data);
+      })
+      .catch((e) => console.log(e));
+  });
+
   socket.on("disconnect", () => {
     console.log("User disconnected ", socket.id);
   });
