@@ -16,8 +16,8 @@ import(
 )
 
 const(
-	topic = "Game"
-	brokerAddress = "localhost:9092"
+	topic = "my-topic"
+	brokerAddress = "my-cluster-kafka-bootstrap:9092"
 )
 var (
 	usr      = "admin"

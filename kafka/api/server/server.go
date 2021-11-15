@@ -16,8 +16,8 @@ import (
 	"google.golang.org/grpc"
 )
 const(
-	topic = "Game"
-	brokerAddress = "localhost:9092"
+	topic = "my-topic"
+	brokerAddress = "my-cluster-kafka-bootstrap:9092"
 )
 func produce (ctx context.Context, req *pb.Game){
 	l := log.New(os.Stdout, "Kafka Escribiendo: ", 0)
@@ -30,7 +30,7 @@ func produce (ctx context.Context, req *pb.Game){
 	err := w.WriteMessages(ctx, kafka.Message{
 		Key: []byte(strconv.Itoa(int(req.Id))),
 		Value: []byte("{\"id\": "+ strconv.Itoa(int(req.Id))+ 
-		", \"gameName\": \""+req.GameName+"\", \"Winner\":\""+
+		", \"gameName\": \""+req.GameName+"\", \"winner\":\""+
 		strconv.Itoa(winner)+"\", \"players\": "+strconv.Itoa(int(req.Players))+
 		", \"worker\":\"Kafka\"}"),
 	})
