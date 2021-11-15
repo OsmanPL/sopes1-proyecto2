@@ -1,4 +1,4 @@
-import Reporte from "./components/Reportes/Mongo";
+import Reporte from "./components/Reportes/Reporte";
 
 function App() {
   return (

@@ -54,9 +54,15 @@ const getPlayer = async (player) => {
       id: temp.id,
       gameName: temp.gameName,
       state: player === temp.winner,
+      winner: temp.winner,
     };
   } catch (error) {
-    return [];
+    return {
+      id: 0,
+      gameName: "",
+      state: false,
+      winner: "",
+    };
   }
 };
 

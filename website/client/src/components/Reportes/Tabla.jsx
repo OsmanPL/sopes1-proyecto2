@@ -8,7 +8,7 @@ const Tabla = (props) => {
   const data = props.data;
 
   return (
-    <TableScrollbar rows={10}>
+    <TableScrollbar rows={props.row || 10}>
       <Table striped bordered hover variant="light">
         <thead>
           <tr>
