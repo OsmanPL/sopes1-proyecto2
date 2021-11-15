@@ -3,9 +3,18 @@ import dotenv from "dotenv";
 import http from "http";
 import cors from "cors";
 import { Server } from "socket.io";
+import * as mongo from "./database/mongo";
+import { getAll, getTopWorker, getTopGames } from "./controller/mongo-game";
+import {
+  getLastGames,
+  getBestPlayers,
+  getPlayer,
+} from "./controller/redis-game";
 
+dotenv.config();
 const app = express();
 const server = http.createServer(app);
+mongo.connect();
 
 const io = new Server(server, {
   cors: {
@@ -16,13 +25,36 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log(`User connected ${socket.id}`);
-  
+
+  setInterval(() => {
+    getAll()
+      .then((data) => {
+        socket.emit("getDataMongo", data);
+      })
+      .catch((e) => console.log(e));
+  }, 1500);
+
+  setInterval(() => {
+    getTopWorker()
+      .then((data) => {
+        socket.emit("getTopWorker", data);
+      })
+      .catch((e) => console.log(e));
+  }, 1500);
+
+  setInterval(() => {
+    getTopGames()
+      .then((data) => {
+        socket.emit("getTopGames", data);
+      })
+      .catch((e) => console.log(e));
+  }, 1500);
+
   socket.on("disconnect", () => {
     console.log("User disconnected ", socket.id);
   });
 });
 
-dotenv.config();
 app.set("port", process.env.PORT);
 app.use(cors());
 app.use(express.json());

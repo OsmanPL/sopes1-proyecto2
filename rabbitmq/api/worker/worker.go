@@ -56,15 +56,19 @@ func main() {
 			var game models.Game
 			json.Unmarshal([]byte(delivery.Body), &game)
 			//fmt.Println(game)
-			err := controller.Create(game)
-			if err != nil {
-				fmt.Println(err)
-			} else {
-				fmt.Println("Se inserto correctamente en MongoDB")
-			}
-			insertRedis(string(delivery.Body))
+			go insertMongo(game)
+			go insertRedis(string(delivery.Body))
 		}
 	}()
 
 	<-noStop
+}
+
+func insertMongo(game models.Game) {
+	err := controller.Create(game)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("Se inserto correctamente en MongoDB")
+	}
 }
