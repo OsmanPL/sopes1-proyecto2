@@ -45,16 +45,10 @@ func squidGame(w http.ResponseWriter, r *http.Request) {
 func server() {
 	const port string = "4000"
 	router := mux.NewRouter()
-
-	router.HandleFunc("/", indexRoute)
 	router.HandleFunc("/game/{id}/gamename/{gameName}/players/{players}", squidGame).Methods("POST")
 
 	log.Println("Server Listening on port", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
-}
-
-func indexRoute(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to my api")
 }
 
 func main() {
