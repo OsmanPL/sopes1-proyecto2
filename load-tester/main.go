@@ -48,7 +48,7 @@ func main() {
 
 		url := url_load + url_params
 		fmt.Println(url)
-		/*_, err := http.Get("https://jsonplaceholder.typicode.com/posts/1")
+		/*_, err := http.Get(url)
 		if err != nil {
 			log.Fatalln(err)
 		}*/
