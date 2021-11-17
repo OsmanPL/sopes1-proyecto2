@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-deployment
+spec:
+  selector:
+    matchLabels:
+      role: rabbit-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: rabbit-deployment
+      annotations:
+        linkerd.io/inject: enabled
+    spec:
+      containers:
+      - name: rabbit
+        image: rabbitmq:3.9-management
+        env:
+        - name: RABBITMQ_ERLANG_COOKIE
+          value: "SWQOKODSQALRPCLNMEQG"
+        - name: RABBITMQ_DEFAULT_USER
+          value: "admin"
+        - name: RABBITMQ_DEFAULT_PASS
+          value: "admin"
+        - name: RABBITMQ_DEFAULT_VHOST
+          value: "/"
+        ports:
+        - containerPort: 15672
+        - containerPort: 5672
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-service
+spec:
+  ports:
+  - port: 5672
+    targetPort: 5672
+  selector:
+    role: rabbit-deployment
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-rabbit-deployment
+spec:
+  selector:
+    matchLabels:
+      app: worker-rabbit
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: worker-rabbit
+      annotations:
+        linkerd.io/inject: enabled
+    spec:
+      containers:
+      - name: worker-rabbit
+        image: osmanpl9610/worker-rabbit:latest
+        
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-rabbit
+spec:
+  selector:
+    matchLabels:
+      role: grpc-rabbit
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        role: grpc-rabbit
+      annotations:
+        linkerd.io/inject: enabled
+    spec:
+      containers:
+      - name: grpc-client-rabbit
+        image: osmanpl9610/grpc-client-rabbit:latest
+        ports:
+        - containerPort: 4000
+      - name: grpc-server-rabbit
+        image: osmanpl9610/grpc-server-rabbit:latest
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-rabbit-service
+spec:
+  ports:
+  - port: 4000
+    targetPort: 4000
+  selector:
+    role: grpc-rabbit
+---

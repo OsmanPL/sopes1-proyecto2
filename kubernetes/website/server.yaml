@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      role: server-website
+  template:
+    metadata:
+      labels:
+        role: server-website
+    spec:
+      containers:
+      - name: server-website
+        image: osmanpl9610/server-website:latest
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-deployment
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    role: server-website

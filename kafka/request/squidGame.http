@@ -1,3 +1,3 @@
 ###
-POST http://35.184.172.30.nip.io/game/8/gamename/Lolcito/players/50
+POST http://35.184.172.30.nip.io/game/54/gamename/fifa/players/84
 Content-Type: "application/json"

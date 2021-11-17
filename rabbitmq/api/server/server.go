@@ -19,7 +19,7 @@ type testApiServer struct {
 func producerRabbit(req *pb.Game) {
 	msg := fmt.Sprintf(`{"id":%d,"gameName":"%s","winner":"%s","players":%d,"worker":"%s"}`, req.Id, req.GameName, req.Winner, req.Players, req.Worker)
 
-	rabbit, err := amqp.Dial("amqp://admin:admin@localhost:5672/")
+	rabbit, err := amqp.Dial("amqp://admin:admin@rabbit-service:5672/")
 
 	if err != nil {
 		log.Fatal(err)

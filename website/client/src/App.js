@@ -3,7 +3,7 @@ import Reporte from "./components/Reportes/Reporte";
 function App() {
   return (
     <div>
-      <Reporte />
+      <Reporte/>
     </div>
   );
 }

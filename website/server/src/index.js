@@ -13,13 +13,16 @@ import {
 
 dotenv.config();
 const app = express();
-const server = http.createServer(app);
+
 mongo.connect();
 
+app.set("port", process.env.PORT);
+app.use(cors());
+app.use(express.json());
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
+    origin: "*"
   },
 });
 
@@ -79,13 +82,7 @@ io.on("connection", (socket) => {
   });
 });
 
-app.set("port", process.env.PORT);
-app.use(cors());
-app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
 
 server.listen(app.get("port"), () => {
   console.log(`Server on port ${app.get("port")}`);

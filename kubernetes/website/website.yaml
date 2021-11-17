@@ -1,0 +1,36 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-deployment
+spec:
+  selector:
+    matchLabels:
+      role: website-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: website-deployment
+      annotations:
+        linkerd.io/inject: enabled
+    spec:
+      containers:
+      - name: client-website
+        image: osmanpl9610/client-website:latest
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-website
+spec:
+  ports:
+  - port: 3000
+    targetPort: 80
+  selector:
+    role: website-deployment
+

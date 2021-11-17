@@ -22,7 +22,7 @@ func insertRedis(body string) {
 }
 
 func main() {
-	conn, err := amqp.Dial("amqp://admin:admin@localhost:5672/")
+	conn, err := amqp.Dial("amqp://admin:admin@rabbit-service:5672/")
 
 	if err != nil {
 		log.Fatal(err)
