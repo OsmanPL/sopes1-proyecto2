@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	url_load := "http://squidgame.35.184.172.30.nip.io"
 	args := os.Args[1:]
 	fmt.Printf("Arguments without program name: %v\n", args)
 
@@ -43,7 +44,14 @@ func main() {
 			random_players = 1
 		}
 		random_game := strings.Split(game_names[rand.Intn(len(game_names))], ";")
-		fmt.Println("/game/" + random_game[0] + "/gamename/" + random_game[1] + "/players/" + strconv.Itoa(random_players))
+		url_params := "/game/" + random_game[0] + "/gamename/" + random_game[1] + "/players/" + strconv.Itoa(random_players)
+
+		url := url_load + url_params
+		fmt.Println(url)
+		/*_, err := http.Get("https://jsonplaceholder.typicode.com/posts/1")
+		if err != nil {
+			log.Fatalln(err)
+		}*/
 
 		rungames--
 	}
